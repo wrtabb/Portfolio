@@ -18,4 +18,4 @@ def load_root_file(file_name):
     plt.hist(branches['Electron_pT'])
     plot.show()
 
-load_root_file('Data/background_selection/ZZ.root')
+load_root_file('../Data/background_selection/ZZ.root')
