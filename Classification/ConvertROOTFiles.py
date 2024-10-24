@@ -6,7 +6,7 @@ import uproot
 import matplotlib.pyplot as plt
 import json
 
-def load_root_file(file_name):
+def load_root_file():
     tree_name = 'recoTree/DYTree'
     json_name = 'variable_list.json'
 
@@ -43,4 +43,4 @@ def load_root_file(file_name):
         print()
     # end loop over file_list
 
-load_root_file('../Data/background_selection/ZZ.root')
+load_root_file()
