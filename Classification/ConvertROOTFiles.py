@@ -4,33 +4,43 @@ import numpy as np
 import fastparquet
 import uproot
 import matplotlib.pyplot as plt
+import json
 
 def load_root_file(file_name):
-    file = uproot.open(file_name)    
-    #print(file.keys())
-    #print(file['recoTree/DYTree'])
+    tree_name = 'recoTree/DYTree'
+    json_name = 'variable_list.json'
 
-    tree = file['recoTree/DYTree']
-    #print(tree.keys())
+    with open(json_name) as j:
+        data = json.load(j)
 
-    branches = tree.arrays()
-    #print(branches['Electron_pT'])
+    vars_to_keep = data['variables_to_keep']
+    file_list = data['files_to_load']
 
-    nEvents = 1000
-    elePt = np.zeros(shape=nEvents)
-    for i in range(nEvents):
-        event_len = len(branches['Electron_pT'][i])
-        if event_len > 0:
-            for j in range(event_len):
-                elePt[i] += branches['Electron_pT'][i][j]
-            # end loop over elements in each event
-        else:
-            elePt[i]=-100
-        # end if length
-    # end loop over events
+    for x in range(len(file_list)):
+        file_name = '../Data/background_selection/'
+        file_name += file_list[x]
 
-    plt.hist(elePt,bins=25)
-    plt.xlabel('electron p_T [GeV]')
-    plt.ylabel('num entries')
-    plt.show()
+        print(f"Loading file: {file_name}")
+        with uproot.open(file_name) as file:
+            tree = file[tree_name]
+
+        df = tree.arrays(filter_name=vars_to_keep, library="pd")
+        nrows_before = len(df)
+        print(f"Created dataframe with {nrows_before} rows before applying dielectron condition")
+
+        nelectron_condition = (df['Nelectrons']<1)
+        df = df[~nelectron_condition]
+
+        nrows_after = len(df)
+        print(f"Dataframe now has {nrows_after} rows after applying dielectron condition")
+        print(df['Nelectrons'])
+        save_name = file_name
+        save_name = save_name[:-5]
+        save_name += '.pkl'
+
+        print(f"Saving root file as a pickle file here: {save_name}")
+        df.to_pickle(save_name)
+        print()
+    # end loop over file_list
+
 load_root_file('../Data/background_selection/ZZ.root')
