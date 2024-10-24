@@ -15,9 +15,9 @@ def load_root_file():
     # define tree variables to save to a dataframe
     vars_to_keep = data['variables_to_keep']
     # Define list of root files to load from
-    file_list = data['files_to_load']
+    file_list = data['root_files_to_load']
 
-    # loop over root fils to be loaded
+    # loop over root files to be loaded
     for x in range(len(file_list)):
         file_name = '../Data/background_selection/'
         file_name += file_list[x]
