@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import json
 
 def MakePlot(df,var):
-    elePt = df[var]
-    flattened_data = [item for sublist in elePt for item in sublist]
+    data_to_plot = df[var]
+    data_to_plot = [item for sublist in data_to_plot for item in sublist]
 
-    plt.hist(flattened_data, bins=50, edgecolor='black')
+    plt.hist(data_to_plot, bins=50, edgecolor='black')
     plt.xlabel(var)
     plt.ylabel('number of entries')
 
@@ -34,4 +34,7 @@ for x in range(len(pickle_files)):
     MakePlot(df,'Electron_pT')
     MakePlot(df,'Electron_eta')
     MakePlot(df,'Electron_phi')
+    MakePlot(df,'Photon_pT')
+    MakePlot(df,'Photon_eta')
+    MakePlot(df,'Photon_phi')
     print()

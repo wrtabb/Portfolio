@@ -14,6 +14,8 @@ def load_root_file():
 
     # define tree variables to save to a dataframe
     vars_to_keep = data['variables_to_keep']
+    num_vars_to_keep = len(vars_to_keep)
+    print(f"Number of variables: {num_vars_to_keep}")
     # Define list of root files to load from
     file_list = data['root_files_to_load']
 
@@ -42,7 +44,8 @@ def load_root_file():
         # determine number of events left after selection applied
         nrows_after = len(df)
         print(f"Dataframe now has {nrows_after} rows after applying dielectron condition")
-        print(df['Nelectrons'])
+        selection_eff = 100*nrows_after/nrows_before
+        print(f"The total efficiency is {selection_eff}%")
 
         # Define name for save file
         save_name = file_name
