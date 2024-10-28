@@ -2,6 +2,15 @@ import pandas as pd
 import uproot
 import json
 
+# A function to convert elements with arrays into separate columns
+def expand_arrays(dataframe,var_name):
+    print(f'Expanding array:{var_name} into separate columns')
+    old_var= var_name
+    new_var = pd.DataFrame(dataframe[var_name].tolist(), columns=[var_name+'_1', var_name+'_2'])
+    dataframe = dataframe.drop(columns=[var_name])  # Drop original columns
+    dataframe = pd.concat([dataframe, new_var], axis=1)
+    return dataframe
+
 # The function that does all the work of loading a tree from a root file, converting tree into a dataframe, applying cuts, then saving to a pickel file
 def load_root_file():
     # tree and json file names
@@ -13,7 +22,14 @@ def load_root_file():
         data = json.load(j)
 
     # define tree variables to save to a dataframe
-    vars_to_keep = data['variables_to_keep']
+    #vars_to_keep = data['variables_to_keep']
+    ele_vars = data['electron_variables']
+    vtx_vars = data['vertex_variables']
+    pho_vars = data['photon_variables']
+    met_vars = data['met_variables']
+    num_vars = data['num_variables']
+    vars_to_keep = ele_vars+met_vars+num_vars
+
     num_vars_to_keep = len(vars_to_keep)
     print(f"Number of variables: {num_vars_to_keep}")
     # Define list of root files to load from
@@ -23,6 +39,8 @@ def load_root_file():
     for x in range(len(file_list)):
         file_name = '../Data/background_selection/'
         file_name += file_list[x]
+        cat_name = file_list[x]
+        cat_name = cat_name[:-5]
 
         print(f"Loading file: {file_name}")
         
@@ -47,6 +65,16 @@ def load_root_file():
         selection_eff = 100*nrows_after/nrows_before
         print(f"The total efficiency is {selection_eff}%")
 
+        # Place all array elements into separate columns for each electron
+        for x in ele_vars:
+            df = expand_arrays(df,x)
+
+        # add a column with the category name for later classification
+        df['category'] = cat_name 
+
+        nrows_expanded = len(df)
+        print(f"After running expand_arrays(), dataframe now has {nrows_expanded} rows after applying dielectron condition")
+
         # Define name for save file
         save_name = file_name
         save_name = save_name[:-5]
@@ -55,7 +83,7 @@ def load_root_file():
         # Save dataframe in pickle file
         print(f"Saving root file as a pickle file here: {save_name}")
         df.to_pickle(save_name)
-        print()
+        print(df)
     # end loop over file_list
 
 # Run function
