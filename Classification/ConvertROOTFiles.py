@@ -9,6 +9,7 @@ def expand_arrays(dataframe,var_name):
     new_var = pd.DataFrame(dataframe[var_name].tolist(), columns=[var_name+'_1', var_name+'_2'])
     dataframe = dataframe.drop(columns=[var_name])  # Drop original columns
     dataframe = pd.concat([dataframe, new_var], axis=1)
+
     return dataframe
 
 # The function that does all the work of loading a tree from a root file, converting tree into a dataframe, applying cuts, then saving to a pickel file
@@ -49,25 +50,12 @@ def load_root_file():
             tree = file[tree_name]
 
         # define dataframe using variables listed in json file
-        df = tree.arrays(filter_name=vars_to_keep, library="pd")
-
-        # determine number of events (rows in dataframe)
-        nrows_before = len(df)
-        print(f"Created dataframe with {nrows_before} rows before applying dielectron condition")
-
-        # apply selection criterion: only keep events with two electrons
-        nelectron_condition = (df['Nelectrons']!=2)
-        df = df[~nelectron_condition]
-
-        # determine number of events left after selection applied
-        nrows_after = len(df)
-        print(f"Dataframe now has {nrows_after} rows after applying dielectron condition")
-        selection_eff = 100*nrows_after/nrows_before
-        print(f"The total efficiency is {selection_eff}%")
+        df_tmp1 = tree.arrays(filter_name=vars_to_keep, library="pd")
+        df_tmp2 = df_tmp1[df_tmp1['Nelectrons']==2]
 
         # Place all array elements into separate columns for each electron
         for x in ele_vars:
-            df = expand_arrays(df,x)
+            df = expand_arrays(df_tmp2,x)
 
         # add a column with the category name for later classification
         df['category'] = cat_name 
@@ -83,6 +71,7 @@ def load_root_file():
         # Save dataframe in pickle file
         print(f"Saving root file as a pickle file here: {save_name}")
         df.to_pickle(save_name)
+
         print(df)
     # end loop over file_list
 
