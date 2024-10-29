@@ -6,10 +6,11 @@ import json
 def expand_arrays(dataframe,var_name):
     print(f'Expanding array:{var_name} into separate columns')
     old_var= var_name
+    print(f'Old variable: {old_var}')
     new_var = pd.DataFrame(dataframe[var_name].tolist(), columns=[var_name+'_1', var_name+'_2'])
-    dataframe = dataframe.drop(columns=[var_name])  # Drop original columns
+    print(f'New variable: {new_var}')
+    dataframe = dataframe.drop(columns=[var_name])
     dataframe = pd.concat([dataframe, new_var], axis=1)
-
     return dataframe
 
 # The function that does all the work of loading a tree from a root file, converting tree into a dataframe, applying cuts, then saving to a pickel file
