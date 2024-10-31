@@ -26,8 +26,7 @@ def reorder_electrons(df, electron_vars):
                 df.at[index, f'{var}_1'], df.at[index, f'{var}_2'] = row[f'{var}_2'], row[f'{var}_1']
     return df
 
-# The function that does all the work of loading a tree from a root file, converting tree into a dataframe, applying cuts, then saving to a pickel file
-def load_root_file():
+def convert_root_file():
     # tree and json file names
     tree_name = 'recoTree/DYTree'
     json_name = 'variable_list.json'
@@ -90,4 +89,4 @@ def load_root_file():
     # end loop over file_list
 
 # Run function
-load_root_file()
+convert_root_file()
