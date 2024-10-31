@@ -7,7 +7,7 @@ def expand_arrays(dataframe,var_name):
     print(f'Expanding array:{var_name} into separate columns')
     try:
         new_columns = pd.DataFrame(dataframe[var_name].tolist(), 
-                                   columns = [var_name+'_1', var_name+'_2'],
+                                   columns = [f'{var_name}_1', f'{var_name}_2'],
                                    index = dataframe.index)
         dataframe = dataframe.drop(columns=[var_name])
         dataframe = pd.concat([dataframe, new_columns], axis=1)
@@ -59,7 +59,7 @@ def load_root_file():
         # Place all array elements into separate columns for each electron
         df = df_tmp2
         for x in ele_vars:
-            df = expand_arrays(df_tmp2,x)
+            df = expand_arrays(df,x)
 
         # add a column with the category name for later classification
         df['category'] = cat_name 
@@ -73,9 +73,8 @@ def load_root_file():
         save_name += '.pkl'
 
         # Save dataframe in pickle file
-        print(f"Saving root file as a pickle file here: {save_name}")
+        print(f"Saving pickle file: {save_name}")
         df.to_pickle(save_name)
-        print(df)
         del df
     # end loop over file_list
 

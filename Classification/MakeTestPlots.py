@@ -4,8 +4,8 @@ import json
 
 def MakePlot(df,var):
     data_to_plot = df[var]
-    #data_to_plot = [item for sublist in data_to_plot for item in sublist]
-    #print(f"Data shape: {data_shape}")
+    data_to_plot = [item for sublist in data_to_plot for item in sublist]
+    print(f"Data shape: {data_shape}")
 
     plt.hist(data_to_plot, bins=50, edgecolor='black')
     plt.xlabel(var)
@@ -31,6 +31,7 @@ for x in range(len(pickle_files)):
     file_name += pickle_files[x]
     print(f"Loading pickle file {file_name}")
     df = pd.read_pickle(file_name)
+    df.head()
 
     MakePlot(df,'Electron_pT_1')
     MakePlot(df,'Electron_eta_1')
