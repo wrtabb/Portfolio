@@ -4,8 +4,6 @@ import json
 
 def MakePlot(df,var):
     data_to_plot = df[var]
-    data_to_plot = [item for sublist in data_to_plot for item in sublist]
-    print(f"Data shape: {data_shape}")
 
     plt.hist(data_to_plot, bins=50, edgecolor='black')
     plt.xlabel(var)

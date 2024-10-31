@@ -16,6 +16,16 @@ def expand_arrays(dataframe,var_name):
         print(f"Error expanding {var_name}: {e}")
     return dataframe
 
+# Define a function to ensure higher pT electron is always in *_1 columns
+def reorder_electrons(df, electron_vars):
+    for index, row in df.iterrows():
+        if row['Electron_pT_2'] > row['Electron_pT_1']:
+            # Swap each variable
+            for var in electron_vars:
+                # Swap values between {var}_1 and {var}_2
+                df.at[index, f'{var}_1'], df.at[index, f'{var}_2'] = row[f'{var}_2'], row[f'{var}_1']
+    return df
+
 # The function that does all the work of loading a tree from a root file, converting tree into a dataframe, applying cuts, then saving to a pickel file
 def load_root_file():
     # tree and json file names
@@ -61,6 +71,7 @@ def load_root_file():
         for x in ele_vars:
             df = expand_arrays(df,x)
 
+        df = reorder_electrons(df,ele_vars)
         # add a column with the category name for later classification
         df['category'] = cat_name 
 
