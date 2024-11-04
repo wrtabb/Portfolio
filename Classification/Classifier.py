@@ -8,8 +8,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import json
+import time as t
 
-def split_and_train(df):
+def split_and_train_svm(df):
+    # Polynomial support vector machine algorithm
     nrows = len(df)
     df = df.reset_index(drop=True)
     y = df['category'].to_numpy()
@@ -26,10 +28,10 @@ def split_and_train(df):
                 ("svm_clf",SVC(kernel="poly",degree=3,coef0=1,C=5))
             ])
     svm_clf.fit(X_train,y_train)
-    #print(f'Prediciton: {svm_clf.predict([X[802]])} vs. Truth: {y[802]}')
-    print(cross_val_score(svm_clf,X_train,y_train,cv=3,scoring="accuracy"))
+    print(cross_val_score(svm_clf,X_train,y_train,cv=10,scoring="accuracy"))
 
 def plot_correlations(df):
+    # Save a plot of correlations to assist in evaluating chosen variables
     matrix = df.corr()
     variables = []
     for i in matrix.columns:
@@ -41,11 +43,11 @@ def plot_correlations(df):
     plt.yticks(range(len(matrix)),variables,fontsize=5)
     plt.xlabel('xlabel',fontsize=10)
     plt.ylabel('ylabel',fontsize=10)
-    #plt.show()
     print('Saving matrix of correlations')
     plt.savefig('../Data/background_selection/correlations.png',dpi=1000)
     plt.close()
 
+start_time = t.time()
 json_name = 'variable_list.json'
 # Load data from json file
 with open(json_name) as j:
@@ -77,4 +79,15 @@ df = df.dropna()
 # Plot correlations to determine if any variables can be dropped
 plot_correlations(df)
 
-#split_and_train(df)
+# Carry out training
+split_and_train_svm(df)
+
+time_diff = t.time() - start_time
+if time_diff > 60:
+    time_diff = time_diff/60
+    time_diff = round(time_diff,1)
+    print(f'This program took {time_diff} m to run')
+else:
+    time_diff = round(time_diff,1)
+    print(f'This program took {time_diff} s to run')
+
