@@ -31,11 +31,11 @@ for x in range(len(pickle_files)):
     df = pd.read_pickle(file_name)
     df.head()
 
+    matrix_corr = df.corr()
     MakePlot(df,'Electron_pT_1')
     MakePlot(df,'Electron_eta_1')
     MakePlot(df,'Electron_phi_1')
     MakePlot(df,'Electron_pT_2')
     MakePlot(df,'Electron_eta_2')
     MakePlot(df,'Electron_phi_2')
-
 

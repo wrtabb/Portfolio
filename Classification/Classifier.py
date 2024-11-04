@@ -29,6 +29,23 @@ def split_and_train(df):
     #print(f'Prediciton: {svm_clf.predict([X[802]])} vs. Truth: {y[802]}')
     print(cross_val_score(svm_clf,X_train,y_train,cv=3,scoring="accuracy"))
 
+def plot_correlations(df):
+    matrix = df.corr()
+    variables = []
+    for i in matrix.columns:
+        variables.append(i)
+
+    plt.imshow(matrix, cmap='Blues')
+    plt.colorbar()
+    plt.xticks(range(len(matrix)),variables,rotation=45,ha='right',fontsize=4)
+    plt.yticks(range(len(matrix)),variables,fontsize=5)
+    plt.xlabel('xlabel',fontsize=10)
+    plt.ylabel('ylabel',fontsize=10)
+    #plt.show()
+    print('Saving matrix of correlations')
+    plt.savefig('../Data/background_selection/correlations.png',dpi=1000)
+    plt.close()
+
 json_name = 'variable_list.json'
 # Load data from json file
 with open(json_name) as j:
@@ -57,4 +74,7 @@ df = df.astype({col: 'int' for col in df.select_dtypes('bool').columns})
 df = df.replace([np.inf, -np.inf], np.nan)
 df = df.dropna()
 
-split_and_train(df)
+# Plot correlations to determine if any variables can be dropped
+plot_correlations(df)
+
+#split_and_train(df)

@@ -1,10 +1,9 @@
 {
-	"electron_variables": ["Electron_Energy", "Electron_pT", "Electron_eta", "Electron_phi", "Electron_etaSC", "Electron_phiSC", "Electron_etaWidth", "Electron_phiWidth", "Electron_sigmaIEtaIEta", "Electron_Full5x5_SigmaIEtaIEta", "Electron_HoverE", "Electron_fbrem", "Electron_eOverP", "Electron_EnergySC", "Electron_preEnergySC", "Electron_rawEnergySC", "Electron_etSC", "Electron_passVetoID", "Electron_passLooseID", "Electron_passMediumID", "Electron_passTightID", "Electron_r9", "Electron_ecalDriven"],
+	"electron_variables": ["Electron_pT", "Electron_eta", "Electron_phi", "Electron_etaWidth", "Electron_phiWidth", "Electron_sigmaIEtaIEta", "Electron_HoverE", "Electron_fbrem", "Electron_eOverP", "Electron_EnergySC", "Electron_passMediumID", "Electron_r9", "Electron_ecalDriven"],
 	"vertex_variables": ["vtxTrkDiE1Pt", "vtxTrkDiE2Pt", "vtxTrkDiEChi2", "vtxTrkDiEProb", "vtxTrkDiENdof", "vtxTrkEMu1Pt", "vtxTrkEMu2Pt", "vtxTrkEMuChi2", "vtxTrkEMuProb", "vtxTrkEMuNdof", "vtxTrkEMu1Pt_TuneP", "vtxTrkEMu2Pt_TuneP", "vtxTrkEMuChi2_TuneP", "vtxTrkEMuProb_TuneP", "vtxTrkEMuNdof_TuneP"],
 	"photon_variables": ["Photon_hasPixelSeed", "Photon_pT", "Photon_eta", "Photon_phi", "Photon_HoverE", "Photon_Full5x5_SigmaIEtaIEta", "Photon_ChIso", "Photon_NhIso", "Photon_PhIso", "Photon_ChIsoWithEA", "Photon_NhIsoWithEA", "Photon_PhIsoWithEA", "Photon_passMediumID"],
-	"met_variables": ["pfMET_pT", "pfMET_phi", "pfMET_Px", "pfMET_Py", "pfMET_SumEt", "pfMET_Type1_pT", "pfMET_Type1_phi", "pfMET_Type1_Px", "pfMET_Type1_Py", "pfMET_Type1_SumEt", "pfMET_Type1_PhiCor_pT", "pfMET_Type1_PhiCor_phi", "pfMET_Type1_PhiCor_Px", "pfMET_Type1_PhiCor_Py", "pfMET_Type1_PhiCor_SumEt"],
-	"num_variables": ["nVertices", "Njets", "Nelectrons","nPhotons","nPileUp"],
+	"met_variables": ["pfMET_pT", "pfMET_phi", "pfMET_Px", "pfMET_Py", "pfMET_SumEt"],
+	"num_variables": ["nVertices", "Njets", "Nelectrons","nPhotons"],
 	"root_files_to_load": ["DYLL_M50toInf.root", "ST_tW.root", "WJetsToLNu.root", "WZ.root", "ST_tbarW.root", "ttbar.root", "WW.root", "ZZ.root"],
 	"pickle_files_to_load": ["DYLL_M50toInf.pkl", "ST_tW.pkl", "WJetsToLNu.pkl", "WZ.pkl", "ST_tbarW.pkl", "ttbar.pkl", "WW.pkl", "ZZ.pkl"]
-
 }
