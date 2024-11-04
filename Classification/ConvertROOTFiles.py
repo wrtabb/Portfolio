@@ -46,6 +46,7 @@ def convert_root_file():
     file_list = data['root_files_to_load']
 
     # loop over root files to be loaded
+    cat_num = 0
     for x in file_list:
         file_name = '../Data/background_selection/'+x
         cat_name = x[:-5]
@@ -72,7 +73,8 @@ def convert_root_file():
 
         df = reorder_electrons(df,ele_vars)
         # add a column with the category name for later classification
-        df['category'] = cat_name 
+        df['category'] = cat_num
+        cat_num = cat_num + 1
 
         nrows_expanded = len(df)
         print(f"After running expand_arrays(), dataframe now has {nrows_expanded} rows")
@@ -85,6 +87,7 @@ def convert_root_file():
         # Save dataframe in pickle file
         print(f"Saving pickle file: {save_name}")
         df.to_pickle(save_name)
+        print(df)
         del df
     # end loop over file_list
 

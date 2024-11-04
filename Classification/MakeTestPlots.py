@@ -14,7 +14,7 @@ def MakePlot(df,var):
     plot_save += var
     plot_save += '.png'
 
-    print(f"Saving plot as {plot_save}")
+    print(f"Saving plot as {plot_save}\n")
     plt.savefig(plot_save,dpi=300)
     plt.close()
 
@@ -37,4 +37,5 @@ for x in range(len(pickle_files)):
     MakePlot(df,'Electron_pT_2')
     MakePlot(df,'Electron_eta_2')
     MakePlot(df,'Electron_phi_2')
-    print()
+
+
