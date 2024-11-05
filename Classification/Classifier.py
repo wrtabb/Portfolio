@@ -1,6 +1,7 @@
-from sklearn.model_selection import cross_val_score
-from sklearn.metrics import precision_score, recall_score
+from sklearn.model_selection import cross_val_score, cross_val_predict
+from sklearn.metrics import precision_score, recall_score, confusion_matrix
 from sklearn.svm import SVC
+from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 import matplotlib as mpl
@@ -10,8 +11,34 @@ import pandas as pd
 import json
 import time as t
 
-def split_and_train_svm(df):
-    # Polynomial support vector machine algorithm
+def binary_classifier_svm(df):
+    # train for signal or background
+    nrows = len(df)
+    df = df.reset_index(drop=True)
+    y = df['category'].to_numpy()
+    X = df.drop(columns='category')
+    X = X.to_numpy()
+    train_split = round(0.8*nrows)
+
+    print(f'Training on {train_split} events')
+    X_train, X_test = X[:train_split], X[train_split:]
+    y_train, y_test = y[:train_split], y[train_split:]
+
+    # define train and test for only one category; 0 = Signal
+    y_train_sig = (y_train == 0)
+    y_test_sig = (y_test == 0)
+
+    sgd_clf = SGDClassifier(random_state=42)
+    sgd_clf.fit(X_train,y_train_sig)
+    y_train_pred = cross_val_predict(sgd_clf, X_train, y_train_sig, cv=3)
+    con_mat = confusion_matrix(y_train_sig, y_train_pred)
+
+    # plot confusion matrix
+    plt.matshow(con_mat, cmap=plt.cm.gray)
+    plt.show()
+
+def multicategory_classifier_svm(df):
+    print('Running a multicategory classifier SVM')
     nrows = len(df)
     df = df.reset_index(drop=True)
     y = df['category'].to_numpy()
@@ -28,7 +55,19 @@ def split_and_train_svm(df):
                 ("svm_clf",SVC(kernel="poly",degree=3,coef0=1,C=5))
             ])
     svm_clf.fit(X_train,y_train)
-    print(cross_val_score(svm_clf,X_train,y_train,cv=10,scoring="accuracy"))
+
+    y_train_pred = cross_val_predict(svm_clf, X_train, y_train, cv=3)
+    con_mat = confusion_matrix(y_train, y_train_pred)
+
+    row_sums = con_mat.sum(axis=1, keepdims=True)
+    norm_con_mat = con_mat/row_sums
+    print(norm_con_mat)
+    
+    # plot confusion matrix
+    plt.matshow(norm_con_mat, cmap=plt.cm.gray)
+    save_name = '../Plots/background_selection/normalized_confusion_matrix_multiclass_svm.png'
+    print(f'Saving confusion matrix: {save_name}')
+    plt.savefig(save_name,dpi=300)
 
 def plot_correlations(df):
     # Save a plot of correlations to assist in evaluating chosen variables
@@ -44,7 +83,7 @@ def plot_correlations(df):
     plt.xlabel('xlabel',fontsize=10)
     plt.ylabel('ylabel',fontsize=10)
     print('Saving matrix of correlations')
-    plt.savefig('../Data/background_selection/correlations.png',dpi=1000)
+    plt.savefig('../Plots/background_selection/correlations.png',dpi=1000)
     plt.close()
 
 start_time = t.time()
@@ -80,7 +119,8 @@ df = df.dropna()
 plot_correlations(df)
 
 # Carry out training
-split_and_train_svm(df)
+#binary_classifier_svm(df)
+multicategory_classifier_svm(df)
 
 time_diff = t.time() - start_time
 if time_diff > 60:
