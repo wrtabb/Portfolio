@@ -85,6 +85,7 @@ def convert_root_file():
         save_name = save_name[:-5]
         save_name += '.pkl'
 
+        df = df[:2300]
         # Save dataframe in pickle file
         print(f"Saving pickle file: {save_name}")
         df.to_pickle(save_name)
