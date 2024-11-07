@@ -24,18 +24,24 @@ def binary_classifier_svm(df):
     X_train, X_test = X[:train_split], X[train_split:]
     y_train, y_test = y[:train_split], y[train_split:]
 
-    # define train and test for only one category; 0 = Signal
-    y_train_sig = (y_train == 0)
-    y_test_sig = (y_test == 0)
-
     sgd_clf = SGDClassifier(random_state=42)
-    sgd_clf.fit(X_train,y_train_sig)
-    y_train_pred = cross_val_predict(sgd_clf, X_train, y_train_sig, cv=3)
-    con_mat = confusion_matrix(y_train_sig, y_train_pred)
+    sgd_clf.fit(X_train,y_train)
+    y_train_pred = cross_val_predict(sgd_clf, X_train, y_train, cv=100)
+    y_train_score = cross_val_score(sgd_clf, X_train, y_train, cv=100)
+    #print(f'The average accuracy from cross validation is {round(np.mean(y_train_score),2)}')
+    print(f'Scores: {y_train_score}')
+    print(f'Mean score: {round(np.mean(y_train_score),2)}')
+    print(f'Standard deviation: {round(y_train_score.std(),2)}')
+
+    # create confusion matrix
+    con_mat = confusion_matrix(y_train, y_train_pred)
+    row_sums = con_mat.sum(axis=1, keepdims=True)
+
+    # create normalized confusion matrix
+    norm_con_mat = con_mat/row_sums
 
     # plot confusion matrix
-    plt.matshow(con_mat, cmap=plt.cm.gray)
-    plt.show()
+    plt.matshow(norm_con_mat, cmap=plt.cm.gray)
 
 def multicategory_classifier_svm(df):
     print('Running a multicategory classifier SVM')
@@ -61,7 +67,6 @@ def multicategory_classifier_svm(df):
 
     row_sums = con_mat.sum(axis=1, keepdims=True)
     norm_con_mat = con_mat/row_sums
-    print(norm_con_mat)
     
     # plot confusion matrix
     plt.matshow(norm_con_mat, cmap=plt.cm.gray)
@@ -93,7 +98,8 @@ with open(json_name) as j:
     data = json.load(j)
 
 # Name of pickle files to be loaded
-file_list = data['pickle_files_to_load']
+#file_list = data['pickle_files_to_load']
+file_list = data['pickle_files_2']
 
 # define a blank dataframe for later use
 df = pd.DataFrame()
@@ -119,8 +125,8 @@ df = df.dropna()
 plot_correlations(df)
 
 # Carry out training
-#binary_classifier_svm(df)
-multicategory_classifier_svm(df)
+binary_classifier_svm(df)
+#multicategory_classifier_svm(df)
 
 time_diff = t.time() - start_time
 if time_diff > 60:

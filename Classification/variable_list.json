@@ -5,5 +5,7 @@
 	"met_variables": ["pfMET_pT", "pfMET_phi", "pfMET_Px", "pfMET_Py", "pfMET_SumEt"],
 	"num_variables": ["nVertices", "Njets", "Nelectrons","nPhotons"],
 	"root_files_to_load": ["DYLL_M50toInf.root", "ST_tW.root", "WJetsToLNu.root", "WZ.root", "ST_tbarW.root", "ttbar.root", "WW.root", "ZZ.root"],
-	"pickle_files_to_load": ["DYLL_M50toInf.pkl", "ST_tW.pkl", "WJetsToLNu.pkl", "WZ.pkl", "ST_tbarW.pkl", "ttbar.pkl", "WW.pkl", "ZZ.pkl"]
+	"root_files_2": ["signal.root", "background.root"],
+	"pickle_files_to_load": ["DYLL_M50toInf.pkl", "ST_tW.pkl", "WJetsToLNu.pkl", "WZ.pkl", "ST_tbarW.pkl", "ttbar.pkl", "WW.pkl", "ZZ.pkl"],
+	"pickle_files_2": ["signal.pkl", "background.pkl"]
 }

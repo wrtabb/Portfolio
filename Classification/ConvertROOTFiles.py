@@ -29,8 +29,8 @@ def reorder_electrons(df, electron_vars):
 def convert_root_file():
     # tree and json file names
     tree_name = 'recoTree/DYTree'
-    json_name = 'variable_list.json'
-    #json_name = 'test_variables.json'
+    #json_name = 'variable_list.json'
+    json_name = 'test_variables.json'
 
     # Load data from json file
     with open(json_name) as j:
@@ -44,7 +44,8 @@ def convert_root_file():
     vars_to_keep = ele_vars+met_vars+num_vars
 
     # Define list of root files to load
-    file_list = data['root_files_to_load']
+    #file_list = data['root_files_to_load']
+    file_list = data['root_files_2']
 
     # loop over root files to be loaded
     cat_num = 0
@@ -85,7 +86,7 @@ def convert_root_file():
         save_name = save_name[:-5]
         save_name += '.pkl'
 
-        df = df[:2300]
+        df = df[:25000]
         # Save dataframe in pickle file
         print(f"Saving pickle file: {save_name}")
         df.to_pickle(save_name)
