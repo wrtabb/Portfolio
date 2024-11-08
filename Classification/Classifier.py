@@ -44,9 +44,13 @@ def binary_classifier_sgd(df):
 
     # create normalized confusion matrix
     norm_con_mat = con_mat/row_sums
+    print(norm_con_mat)
 
     # plot confusion matrix
     plt.matshow(norm_con_mat, cmap=plt.cm.gray)
+    save_name = '../Plots/background_selection/normalized_confusion_matrix_multiclass_svm.png'
+    print(f'Saving confusion matrix: {save_name}')
+    plt.savefig(save_name,dpi=300)
 
 def multicategory_classifier_svm(df):
     print('Running a multicategory classifier SVM')
@@ -72,6 +76,7 @@ def multicategory_classifier_svm(df):
 
     row_sums = con_mat.sum(axis=1, keepdims=True)
     norm_con_mat = con_mat/row_sums
+    print(norm_con_mat)
     
     # plot confusion matrix
     plt.matshow(norm_con_mat, cmap=plt.cm.gray)
