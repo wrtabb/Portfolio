@@ -104,7 +104,12 @@ def plot_correlations(df):
 start_time = t.time()
 
 # Load data from json file
-json_name = 'variables_0.json'
+parser = argparse.ArgumentParser(description='variable file to use')
+parser.add_argument('--var_num')
+args = parser.parse_args()
+
+json_name = (f'variables_{args.var_num}.json')
+
 with open(json_name) as j:
     data = json.load(j)
 

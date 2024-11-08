@@ -1,6 +1,7 @@
 import pandas as pd
 import uproot
 import json
+import argparse
 
 # A function to convert elements with arrays into separate columns
 def expand_arrays(dataframe,var_name):
@@ -26,10 +27,11 @@ def reorder_electrons(df, electron_vars):
                 df.at[index, f'{var}_1'], df.at[index, f'{var}_2'] = row[f'{var}_2'], row[f'{var}_1']
     return df
 
-def convert_root_file():
+def convert_root_file(json_name):
     # tree and json file names
     tree_name = 'recoTree/DYTree'
-    json_name = 'variables_0.json'
+    #json_name = 'variables_0.json'
+    print(f'Loading variables from json file: {json_name}')
 
     # Load data from json file
     with open(json_name) as j:
@@ -93,5 +95,10 @@ def convert_root_file():
         del df
     # end loop over file_list
 
+parser = argparse.ArgumentParser(description='variable file to use')
+parser.add_argument('--var_num')
+args = parser.parse_args()
+
+var_file = (f'variables_{args.var_num}.json')
 # Run function
-convert_root_file()
+convert_root_file(var_file)
