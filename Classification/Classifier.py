@@ -10,8 +10,9 @@ import numpy as np
 import pandas as pd
 import json
 import time as t
+import argparse
 
-def binary_classifier_svm(df):
+def binary_classifier_sgd(df):
     # train for signal or background
     nrows = len(df)
     df = df.reset_index(drop=True)
@@ -24,7 +25,11 @@ def binary_classifier_svm(df):
     X_train, X_test = X[:train_split], X[train_split:]
     y_train, y_test = y[:train_split], y[train_split:]
 
-    sgd_clf = SGDClassifier(random_state=42)
+    sgd_clf = Pipeline([
+                ("scaler",StandardScaler()),
+                ("sgd_clf",SGDClassifier(random_state=42))
+            ])
+    #sgd_clf = SGDClassifier(random_state=42)
     sgd_clf.fit(X_train,y_train)
     y_train_pred = cross_val_predict(sgd_clf, X_train, y_train, cv=100)
     y_train_score = cross_val_score(sgd_clf, X_train, y_train, cv=100)
@@ -92,8 +97,9 @@ def plot_correlations(df):
     plt.close()
 
 start_time = t.time()
-json_name = 'variable_list.json'
+
 # Load data from json file
+json_name = 'variables_0.json'
 with open(json_name) as j:
     data = json.load(j)
 
@@ -125,7 +131,7 @@ df = df.dropna()
 plot_correlations(df)
 
 # Carry out training
-binary_classifier_svm(df)
+binary_classifier_sgd(df)
 #multicategory_classifier_svm(df)
 
 time_diff = t.time() - start_time

@@ -29,8 +29,7 @@ def reorder_electrons(df, electron_vars):
 def convert_root_file():
     # tree and json file names
     tree_name = 'recoTree/DYTree'
-    #json_name = 'variable_list.json'
-    json_name = 'test_variables.json'
+    json_name = 'variables_0.json'
 
     # Load data from json file
     with open(json_name) as j:
