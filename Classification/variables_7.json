@@ -1,0 +1,9 @@
+{
+	"electron_variables": ["Electron_pT", "Electron_eta", "Electron_phi", "Electron_passMediumID"],
+	"vertex_variables": [],
+	"photon_variables": [],
+	"met_variables": [],
+	"num_variables": ["Nelectrons"],
+	"files_all_categories": ["DYLL_M50toInf", "ST_tW", "WJetsToLNu", "WZ", "ST_tbarW", "ttbar", "WW", "ZZ"],
+	"files_binary": ["signal", "background"]
+}

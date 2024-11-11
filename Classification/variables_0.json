@@ -1,0 +1,9 @@
+{
+	"electron_variables": ["Electron_pT", "Electron_eta", "Electron_phi", "Electron_etaWidth", "Electron_phiWidth", "Electron_sigmaIEtaIEta", "Electron_HoverE", "Electron_fbrem", "Electron_eOverP", "Electron_EnergySC", "Electron_passMediumID", "Electron_r9", "Electron_ecalDriven"],
+	"vertex_variables": ["vtxTrkDiE1Pt", "vtxTrkDiE2Pt", "vtxTrkDiEChi2", "vtxTrkDiEProb", "vtxTrkDiENdof", "vtxTrkEMu1Pt", "vtxTrkEMu2Pt", "vtxTrkEMuChi2", "vtxTrkEMuProb", "vtxTrkEMuNdof", "vtxTrkEMu1Pt_TuneP", "vtxTrkEMu2Pt_TuneP", "vtxTrkEMuChi2_TuneP", "vtxTrkEMuProb_TuneP", "vtxTrkEMuNdof_TuneP"],
+	"photon_variables": ["Photon_hasPixelSeed", "Photon_pT", "Photon_eta", "Photon_phi", "Photon_HoverE", "Photon_Full5x5_SigmaIEtaIEta", "Photon_ChIso", "Photon_NhIso", "Photon_PhIso", "Photon_ChIsoWithEA", "Photon_NhIsoWithEA", "Photon_PhIsoWithEA", "Photon_passMediumID"],
+	"met_variables": ["pfMET_pT", "pfMET_phi", "pfMET_Px", "pfMET_Py", "pfMET_SumEt"],
+	"num_variables": ["nVertices", "Njets", "Nelectrons","nPhotons"],
+	"files_all_categories": ["DYLL_M50toInf", "ST_tW", "WJetsToLNu", "WZ", "ST_tbarW", "ttbar", "WW", "ZZ"],
+	"files_binary": ["signal", "background"]
+}

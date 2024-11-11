@@ -43,7 +43,7 @@ def convert_root_file(var_num):
     met_vars = data['met_variables']
     num_vars = data['num_variables']
     vtx_vars = data['vertex_variables']
-    vars_to_keep = ele_vars+met_vars+vtx_vars+num_vars
+    vars_to_keep = ele_vars+met_vars+num_vars
 
     # Define list of root files to load
     #file_list = data['files_all_categories']
