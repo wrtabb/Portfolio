@@ -84,7 +84,7 @@ def multicategory_classifier_svm(df):
     print(f'Saving confusion matrix: {save_name}')
     plt.savefig(save_name,dpi=300)
 
-def plot_correlations(df):
+def plot_correlations(df,var_num):
     # Save a plot of correlations to assist in evaluating chosen variables
     matrix = df.corr()
     variables = []
@@ -98,29 +98,33 @@ def plot_correlations(df):
     plt.xlabel('xlabel',fontsize=10)
     plt.ylabel('ylabel',fontsize=10)
     print('Saving matrix of correlations')
-    plt.savefig('../Plots/background_selection/correlations.png',dpi=1000)
+    plt.savefig(f'../Plots/background_selection/correlations_{var_num}.png',dpi=1000)
     plt.close()
 
+# Log the start time 
 start_time = t.time()
 
-# Load data from json file
+# Parse the argument option
+# This argument will be a number corresponding to one of the variable sets
 parser = argparse.ArgumentParser(description='variable file to use')
 parser.add_argument('--var_num')
 args = parser.parse_args()
 
-json_name = (f'variables_{args.var_num}.json')
-
+# Load data from json file
+json_name = (f"variables_{args.var_num}.json")
+print(f'loading: {json_name}')
 with open(json_name) as j:
     data = json.load(j)
 
 # Name of pickle files to be loaded
-#file_list = data['pickle_files_to_load']
-file_list = data['pickle_files_2']
+#file_list = data['files_all_categories']
+file_list = data['files_binary']
 
 # define a blank dataframe for later use
 df = pd.DataFrame()
 # Loop over files to be loaded and add them together
 for x in file_list:
+    x += (f'_{args.var_num}.pkl')
     file_name = '../Data/background_selection/'+x
     print(f'Opening file: {file_name}')
     df_tmp = pd.read_pickle(file_name)
@@ -138,7 +142,7 @@ df = df.replace([np.inf, -np.inf], np.nan)
 df = df.dropna()
 
 # Plot correlations to determine if any variables can be dropped
-plot_correlations(df)
+plot_correlations(df,args.var_num)
 
 # Carry out training
 binary_classifier_sgd(df)

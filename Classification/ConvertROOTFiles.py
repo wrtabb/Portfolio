@@ -27,10 +27,10 @@ def reorder_electrons(df, electron_vars):
                 df.at[index, f'{var}_1'], df.at[index, f'{var}_2'] = row[f'{var}_2'], row[f'{var}_1']
     return df
 
-def convert_root_file(json_name):
+def convert_root_file(var_num):
+    json_name = (f'variables_{var_num}.json')
     # tree and json file names
     tree_name = 'recoTree/DYTree'
-    #json_name = 'variables_0.json'
     print(f'Loading variables from json file: {json_name}')
 
     # Load data from json file
@@ -42,18 +42,18 @@ def convert_root_file(json_name):
     ele_vars = data['electron_variables']
     met_vars = data['met_variables']
     num_vars = data['num_variables']
-    vars_to_keep = ele_vars+met_vars+num_vars
+    vtx_vars = data['vertex_variables']
+    vars_to_keep = ele_vars+met_vars+vtx_vars+num_vars
 
     # Define list of root files to load
-    #file_list = data['root_files_to_load']
-    file_list = data['root_files_2']
+    #file_list = data['files_all_categories']
+    file_list = data['files_binary']
 
     # loop over root files to be loaded
     cat_num = 0
     for x in file_list:
+        x += '.root'
         file_name = '../Data/background_selection/'+x
-        cat_name = x[:-5]
-
         print(f"Loading file: {file_name}")
         
         # load tree from root file using uproot
@@ -85,7 +85,7 @@ def convert_root_file(json_name):
         # Define name for save file
         save_name = file_name
         save_name = save_name[:-5]
-        save_name += '.pkl'
+        save_name += (f'_{var_num}.pkl')
 
         df = df[:25000]
         # Save dataframe in pickle file
@@ -99,6 +99,5 @@ parser = argparse.ArgumentParser(description='variable file to use')
 parser.add_argument('--var_num')
 args = parser.parse_args()
 
-var_file = (f'variables_{args.var_num}.json')
 # Run function
-convert_root_file(var_file)
+convert_root_file(args.var_num)
