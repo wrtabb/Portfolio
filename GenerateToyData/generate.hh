@@ -1,7 +1,0 @@
-
-class Lepton
-{
-    public:
-    private:
-        
-}

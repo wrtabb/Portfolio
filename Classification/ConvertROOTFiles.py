@@ -88,6 +88,7 @@ def convert_root_file(var_num):
         save_name += (f'_{var_num}.pkl')
 
         df = df[:25000]
+        df = df.reset_index(drop=True)
         # Save dataframe in pickle file
         print(f"Saving pickle file: {save_name}")
         df.to_pickle(save_name)
