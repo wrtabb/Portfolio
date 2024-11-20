@@ -12,19 +12,31 @@ import json
 import time as t
 import argparse
 
-def binary_classifier_sgd(df):
-    # train for signal or background
-    nrows = len(df)
-    df = df.reset_index(drop=True)
-    y = df['category'].to_numpy()
-    X = df.drop(columns='category')
-    X = X.to_numpy()
-    train_split = round(0.8*nrows)
+def binary_classifier_NN(X_train, X_test, y_train, y_test):
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Input
+    from sklearn.model_selection import train_test_split
+    print('Running binary_classifier_NN()')
 
-    print(f'Training on {train_split} events')
-    X_train, X_test = X[:train_split], X[train_split:]
-    y_train, y_test = y[:train_split], y[train_split:]
+    # Build the model
+    model = Sequential([
+        Input(shape=(X_train.shape[1],)),  # Input layer
+        Dense(128, activation='relu'),
+        Dense(64, activation='relu'),
+        Dense(1, activation='sigmoid')  # Output layer for binary classification
+    ])
 
+    # Compile the model
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+    # Train the model
+    model.fit(X_train, y_train, epochs=10, validation_data=(X_test, y_test), batch_size=32)
+
+    loss, accuracy = model.evaluate(X_test, y_test)
+    print(f"Test Loss: {round(loss,2)}, Test Accuracy: {round(accuracy,2)}\n")
+
+def binary_classifier_sgd(X_train, X_test, y_train, y_test):
+    print('Running binary_classifier_sgd()')
     sgd_clf = Pipeline([
                 ("scaler",StandardScaler()),
                 ("sgd_clf",SGDClassifier(random_state=42))
@@ -36,34 +48,10 @@ def binary_classifier_sgd(df):
     #print(f'The average accuracy from cross validation is {round(np.mean(y_train_score),2)}')
     print(f'Scores: {y_train_score}')
     print(f'Mean score: {round(np.mean(y_train_score),2)}')
-    print(f'Standard deviation: {round(y_train_score.std(),2)}')
+    print(f'Standard deviation: {round(y_train_score.std(),2)}\n')
 
-    # create confusion matrix
-    con_mat = confusion_matrix(y_train, y_train_pred)
-    row_sums = con_mat.sum(axis=1, keepdims=True)
-
-    # create normalized confusion matrix
-    norm_con_mat = con_mat/row_sums
-    print(norm_con_mat)
-
-    # plot confusion matrix
-    plt.matshow(norm_con_mat, cmap=plt.cm.gray)
-    save_name = '../Plots/background_selection/normalized_confusion_matrix_multiclass_svm.png'
-    print(f'Saving confusion matrix: {save_name}')
-    plt.savefig(save_name,dpi=300)
-
-def multicategory_classifier_svm(df):
-    print('Running a multicategory classifier SVM')
-    nrows = len(df)
-    df = df.reset_index(drop=True)
-    y = df['category'].to_numpy()
-    X = df.drop(columns='category')
-    X = X.to_numpy()
-    train_split = round(0.8*nrows)
-
-    print(f'Training on {train_split} events')
-    X_train, X_test = X[:train_split], X[train_split:]
-    y_train, y_test = y[:train_split], y[train_split:]
+def multicategory_classifier_svm(X_train, X_test, y_train, y_test):
+    print('Running multicategory_classifier_svm()')
 
     svm_clf = Pipeline([
                 ("scaler",StandardScaler()),
@@ -72,17 +60,13 @@ def multicategory_classifier_svm(df):
     svm_clf.fit(X_train,y_train)
 
     y_train_pred = cross_val_predict(svm_clf, X_train, y_train, cv=3)
-    con_mat = confusion_matrix(y_train, y_train_pred)
 
-    row_sums = con_mat.sum(axis=1, keepdims=True)
-    norm_con_mat = con_mat/row_sums
-    print(norm_con_mat)
-    
-    # plot confusion matrix
-    plt.matshow(norm_con_mat, cmap=plt.cm.gray)
-    save_name = '../Plots/background_selection/normalized_confusion_matrix_multiclass_svm.png'
-    print(f'Saving confusion matrix: {save_name}')
-    plt.savefig(save_name,dpi=300)
+    y_train_pred = cross_val_predict(svm_clf, X_train, y_train, cv=100)
+    y_train_score = cross_val_score(svm_clf, X_train, y_train, cv=100)
+    #print(f'The average accuracy from cross validation is {round(np.mean(y_train_score),2)}')
+    print(f'Scores: {y_train_score}')
+    print(f'Mean score: {round(np.mean(y_train_score),2)}')
+    print(f'Standard deviation: {round(y_train_score.std(),2)}\n')
 
 def plot_correlations(df,var_num):
     # Save a plot of correlations to assist in evaluating chosen variables
@@ -144,9 +128,21 @@ df = df.dropna()
 # Plot correlations to determine if any variables can be dropped
 plot_correlations(df,args.var_num)
 
+nrows = len(df)
+df = df.reset_index(drop=True)
+y = df['category'].to_numpy()
+X = df.drop(columns='category')
+X = X.to_numpy()
+train_split = round(0.8*nrows)
+
+print(f'Training on {train_split} events')
+X_train, X_test = X[:train_split], X[train_split:]
+y_train, y_test = y[:train_split], y[train_split:]
+
 # Carry out training
-binary_classifier_sgd(df)
-#multicategory_classifier_svm(df)
+binary_classifier_sgd(X_train, X_test, y_train, y_test)
+binary_classifier_NN(X_train, X_test, y_train, y_test)
+#multicategory_classifier_svm(X_train, X_test, y_train, y_test)
 
 time_diff = t.time() - start_time
 if time_diff > 60:
