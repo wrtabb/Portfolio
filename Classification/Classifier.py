@@ -1,4 +1,5 @@
 from sklearn.model_selection import cross_val_score, cross_val_predict
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_score, recall_score, confusion_matrix
 from sklearn.svm import SVC
 from sklearn.linear_model import SGDClassifier
@@ -15,7 +16,6 @@ import argparse
 def binary_classifier_NN(X_train, X_test, y_train, y_test):
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense, Input
-    from sklearn.model_selection import train_test_split
     print('Running binary_classifier_NN()')
 
     # Build the model
@@ -131,8 +131,10 @@ plot_correlations(df,args.var_num)
 nrows = len(df)
 df = df.reset_index(drop=True)
 y = df['category'].to_numpy()
+y = df['category']
 X = df.drop(columns='category')
 X = X.to_numpy()
+X = X
 train_split = round(0.8*nrows)
 
 print(f'Training on {train_split} events')
@@ -140,7 +142,7 @@ X_train, X_test = X[:train_split], X[train_split:]
 y_train, y_test = y[:train_split], y[train_split:]
 
 # Carry out training
-binary_classifier_sgd(X_train, X_test, y_train, y_test)
+#binary_classifier_sgd(X_train, X_test, y_train, y_test)
 binary_classifier_NN(X_train, X_test, y_train, y_test)
 #multicategory_classifier_svm(X_train, X_test, y_train, y_test)
 

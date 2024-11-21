@@ -39,11 +39,14 @@ def convert_root_file(var_num):
 
     # define tree variables to save to a dataframe
     #vars_to_keep = data['variables_to_keep']
-    ele_vars = data['electron_variables']
-    met_vars = data['met_variables']
     num_vars = data['num_variables']
-    vtx_vars = data['vertex_variables']
-    vars_to_keep = ele_vars+met_vars+num_vars
+    jet_vars = data['jet_variables']
+    ele_vars = data['electron_variables']
+    unc_vars = data['uncorrEle_variables']
+    pho_vars = data['photon_variables']
+    pup_vars = data['pileup_variables']
+    met_vars = data['met_variables']
+    vars_to_keep = ele_vars+pup_vars+met_vars+num_vars
 
     # Define list of root files to load
     #file_list = data['files_all_categories']
@@ -70,10 +73,14 @@ def convert_root_file(var_num):
         print(f'There are {num_after_cut} rows after electron cut')
 
         # Place all array elements into separate columns for each electron
-        df = df_tmp2
+        df_tmp3 = df_tmp2
         for x in ele_vars:
-            df = expand_arrays(df,x)
+            df_tmp3 = expand_arrays(df_tmp3,x)
+        #df_tmp4 = df_tmp3
+        #for x in jet_vars:
+        #    df_tmp4 = expand_arrays(df_tmp4,x)
 
+        df = df_tmp3
         df = reorder_electrons(df,ele_vars)
         # add a column with the category name for later classification
         df['category'] = cat_num
