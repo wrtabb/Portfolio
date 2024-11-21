@@ -30,7 +30,9 @@ def binary_classifier_NN(var_num,X_train, X_test, y_train, y_test):
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
     # Train the model
-    history = model.fit(X_train, y_train, epochs=25, validation_data=(X_test, y_test), batch_size=32)
+    history = model.fit(X_train, y_train, epochs=20, 
+                        validation_data=(X_test, y_test), 
+                        batch_size=32)
 
     # Extract data
     loss = history.history['loss']
@@ -50,7 +52,6 @@ def binary_classifier_NN(var_num,X_train, X_test, y_train, y_test):
     plt.ylabel('Loss')
     plt.legend()
 
-    # Plot Accuracy (if available)
     if accuracy and val_accuracy:
         plt.subplot(1, 2, 2)  # Create subplot for accuracy
         plt.plot(epochs, accuracy, 'bo-', label='Training Accuracy')

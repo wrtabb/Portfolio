@@ -38,22 +38,28 @@ def convert_root_file(var_num):
         data = json.load(j)
 
     # define tree variables to save to a dataframe
-    #vars_to_keep = data['variables_to_keep']
-    num_vars = data['num_variables']
-    jet_vars = data['jet_variables']
-    ele_vars = data['electron_variables']
-    unc_vars = data['uncorrEle_variables']
-    pho_vars = data['photon_variables']
-    pup_vars = data['pileup_variables']
-    met_vars = data['met_variables']
+    jet_vars = data['jet_variables'] # contains arrays
+    ele_vars = data['electron_variables']# contains arrays
+    unc_vars = data['uncorrEle_variables'] # contains arrays
+    pho_vars = data['photon_variables'] # contains arrays
+    pup_vars = data['pileup_variables'] # no arrays
+    met_vars = data['met_variables'] # no arrays
+    num_vars = data['num_variables'] # no arrays
+
+    # Choose variables to keep for analysis
+    # Always keep variables without arrays
+    # Add those with arrays after figuring out how many to keep in separate columns
     vars_to_keep = ele_vars+pup_vars+met_vars+num_vars
 
     # Define list of root files to load
+    # For now, binary and multiclass has to be chosen
+    # Need to change to keep both with different names
+    # Would like to compare results
     #file_list = data['files_all_categories']
     file_list = data['files_binary']
 
     # loop over root files to be loaded
-    cat_num = 0
+    cat_num = 0 # category number; for binary: 0, 1; for multiclass: 0-8
     for x in file_list:
         x += '.root'
         file_name = '../Data/background_selection/'+x
