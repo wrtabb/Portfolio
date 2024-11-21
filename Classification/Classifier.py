@@ -13,7 +13,7 @@ import json
 import time as t
 import argparse
 
-def binary_classifier_NN(X_train, X_test, y_train, y_test):
+def binary_classifier_NN(var_num,X_train, X_test, y_train, y_test):
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense, Input
     print('Running binary_classifier_NN()')
@@ -30,7 +30,39 @@ def binary_classifier_NN(X_train, X_test, y_train, y_test):
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
     # Train the model
-    model.fit(X_train, y_train, epochs=10, validation_data=(X_test, y_test), batch_size=32)
+    history = model.fit(X_train, y_train, epochs=25, validation_data=(X_test, y_test), batch_size=32)
+
+    # Extract data
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    accuracy = history.history.get('accuracy', None)
+    val_accuracy = history.history.get('val_accuracy', None)
+    epochs = range(1, len(loss) + 1)
+
+    # Plot Loss
+    plt.figure(figsize=(12, 6))
+
+    plt.subplot(1, 2, 1)  # Create subplot for loss
+    plt.plot(epochs, loss, 'bo-', label='Training Loss')
+    plt.plot(epochs, val_loss, 'r*-', label='Validation Loss')
+    plt.title('Training and Validation Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+
+    # Plot Accuracy (if available)
+    if accuracy and val_accuracy:
+        plt.subplot(1, 2, 2)  # Create subplot for accuracy
+        plt.plot(epochs, accuracy, 'bo-', label='Training Accuracy')
+        plt.plot(epochs, val_accuracy, 'r*-', label='Validation Accuracy')
+        plt.title('Training and Validation Accuracy')
+        plt.xlabel('Epochs')
+        plt.ylabel('Accuracy')
+        plt.legend()
+
+    plt.tight_layout()
+    plt.savefig(f'../Plots/background_selection/accuracy_and_loss_{var_num}.png',dpi=1000)
+
 
     loss, accuracy = model.evaluate(X_test, y_test)
     print(f"Test Loss: {round(loss,2)}, Test Accuracy: {round(accuracy,2)}\n")
@@ -143,7 +175,7 @@ y_train, y_test = y[:train_split], y[train_split:]
 
 # Carry out training
 #binary_classifier_sgd(X_train, X_test, y_train, y_test)
-binary_classifier_NN(X_train, X_test, y_train, y_test)
+binary_classifier_NN(args.var_num,X_train, X_test, y_train, y_test)
 #multicategory_classifier_svm(X_train, X_test, y_train, y_test)
 
 time_diff = t.time() - start_time
