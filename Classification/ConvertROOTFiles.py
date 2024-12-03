@@ -38,10 +38,13 @@ def convert_root_file(var_num):
         data = json.load(j)
 
     # define tree variables to save to a dataframe
+    # the following variables are not used yet
     jet_vars = data['jet_variables'] # contains arrays
-    ele_vars = data['electron_variables']# contains arrays
     unc_vars = data['uncorrEle_variables'] # contains arrays
     pho_vars = data['photon_variables'] # contains arrays
+
+    # Variables that will be used
+    ele_vars = data['electron_variables']# contains arrays
     pup_vars = data['pileup_variables'] # no arrays
     met_vars = data['met_variables'] # no arrays
     num_vars = data['num_variables'] # no arrays
