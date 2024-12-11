@@ -1,0 +1,12 @@
+{
+	"num_variables": ["GENnPair","nPhotons","nUnCorrElectron","Nelectrons","Njets","nTotal","nVertices","PVtrackSize","PVchi2","PVndof","PVnormalizedChi2","PVx","PVy","PVz"],
+	"jet_variables": ["Jet_pT","Jet_eta","Jet_phi","Jet_Charge","Jet_Flavor","Jet_bTag","Jet_CHfrac","Jet_NHfrac","Jet_NHEMfrac","Jet_CHEMfrac","Jet_CHmulti","Jet_NHmulti"],
+	"electron_variables": ["Electron_Energy","Electron_pT","Electron_Px","Electron_Py","Electron_Pz","Electron_eta","Electron_phi","Electron_charge"],
+	"generator_variables": ["GENLepton_E","GENLepton_pT","GENLepton_Px","GENLepton_Py","GENLepton_Pz","GENLepton_eta","GENLepton_phi","GENLepton_charge","GENLepton_ID","GENLepton_isHardProcess"], 
+	"uncorrEle_variables": ["Electron_pTUnCorr","Electron_etaUnCorr","Electron_phiUnCorr","Electron_PxUnCorr","Electron_PyUnCorr","Electron_PzUnCorr","Electron_EnergyUnCorr","Electron_EnergySCUnCorr","Electron_etaSCUnCorr","Electron_phiSCUnCorr","Electron_etSCUnCorr"],
+	"photon_variables": ["Photon_hasPixelSeed","Photon_pT","Photon_eta","Photon_phi","Photon_etaSC","Photon_phiSC","Photon_HoverE","Photon_Full5x5_SigmaIEtaIEta","Photon_ChIso","Photon_NhIso","Photon_PhIso","Photon_ChIsoWithEA","Photon_NhIsoWithEA","Photon_PhIsoWithEA","Photon_passMediumID"],
+	"pileup_variables": ["nPileUp","pileUpReweightIn","pileUpReweight","pileUpReweightPlus","pileUpReweightMinus","pileUpReweightInMuonPhys","pileUpReweightMuonPhys","pileUpReweightPlusMuonPhys","pileUpReweightMinusMuonPhys"],
+	"met_variables": ["pfMET_pT","pfMET_phi","pfMET_Px","pfMET_Py","pfMET_SumEt","pfMET_Type1_pT","pfMET_Type1_phi","pfMET_Type1_Px","pfMET_Type1_Py","pfMET_Type1_SumEt","pfMET_Type1_PhiCor_pT","pfMET_Type1_PhiCor_phi","pfMET_Type1_PhiCor_Px","pfMET_Type1_PhiCor_Py","pfMET_Type1_PhiCor_SumEt"],
+	"files_all_categories": ["DYLL_M50toInf", "ST_tW", "WJetsToLNu", "WZ", "ST_tbarW", "ttbar", "WW", "ZZ"],
+        "files_binary": ["signal"]
+}
